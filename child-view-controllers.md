@@ -12,16 +12,27 @@
 
 # Agenda
 
-1. Identify the Problem
-2. [Refactor the Mega Controller](https://academy.realm.io/posts/andy-matuschak-refactor-mega-controller/)
-3. Back to SOLID
-4. How does this work with my existing codebase?
+1. SOLID Principles Refresher
+2. Identify the Problem
+3. [Refactor the Mega Controller](https://academy.realm.io/posts/andy-matuschak-refactor-mega-controller/)
+4. Back to SOLID
+5. Is this for me?
+
+---
+
+# SOLID Principles
+
+1. **S**ingle Responsibility
+2. **O**pen-Closed
+3. **L**iskov Substitution
+4. **I**nterface Segregation
+5. **D**ependency Inversion
 
 ---
 
 # Technical Debt
 
-Diagram a massive view controller. Attach models and singletons (networking and persistence).
+![inline, fit](https://docs.google.com/drawings/d/e/2PACX-1vSiyCzky-4jY4AlYJkqitT0KnJLrG_nejNLfx0XKHM5jzQ3-NbCrIWqe-AllR9_gIuchrnsK9NU7eOJ/pub?w=629&h=519)
 
 ^ Massive View Controller
 
@@ -102,7 +113,7 @@ func viewDidLoad() {
 ---
 
 ```Swift
-class TallyBarController {
+class TallyBarController: UIViewController {
 
     let viewControllers: [UIViewController]
 
@@ -141,7 +152,7 @@ class TallyBarController {
 ---
 
 ```Swift
-class VerticalSplitController {
+class VerticalSplitController: UIViewController {
 
     enum Behavior {
         case fixedTop(let CGFloat)
@@ -188,7 +199,20 @@ class VerticalSplitController {
 ---
 
 ```Swift
-class EmptyViewController {
+
+protocol Action {
+
+    func start()
+    func stop()
+
+}
+
+```
+
+---
+
+```Swift
+class EmptyViewController: UIViewController {
 
     let contentViewController: UIViewController
     let action: Action
@@ -223,12 +247,12 @@ class EmptyViewController {
 ---
 
 ```Swift
-class FilteredTagsQuery: Action {
+class FilteredProductLocationssQuery: Action {
 
     let areaIdentifier: Int
 
     init(areaIdentifier: Int) {
-	self.areaIdentifier = areaIdentifier 
+        self.areaIdentifier = areaIdentifier 
     }
 
     func start() {
@@ -258,7 +282,7 @@ class FilteredTagsQuery: Action {
 ---
 
 ```Swift
-class UnfilteredTagsQuery: Action {
+class UnfilteredProductLocationsQuery: Action {
 
     func start() {
         // START SCHEDULED TIMER
@@ -288,9 +312,12 @@ class UnfilteredTagsQuery: Action {
 ---
 
 ```Swift
-class ToastController {
+class ToastController: UIViewController {
 
-    init() {
+    let contentViewController: UIViewController
+
+    init(contentViewController: UIViewController) {
+        self.contentViewController = contentViewController
         super.init()
     }
 
@@ -319,30 +346,29 @@ class ToastController {
 
 ---
 
-# SOLID
+# SOLID Principles
 
-1. Single Responsibility
-2. Open-Closed
-3. Liskov Substitution
-4. Interface Segregation
-5. Dependency Inversion
+1. **S**ingle Responsibility
+2. **O**pen-Closed
+3. **L**iskov Substitution
+4. **I**nterface Segregation
+5. **D**ependency Inversion
 
 ---
 
-# Horizontal with Vertical
+# Horizontal meets Vertical
 
 ^ I'm guessing a lot of you and your teams already talk about vertical architecture but now you can start talking about horizontal architecture.
 
 ---
 
-Grid
+# Horizontal meets Vertical
 
- | View | Presenter | Interactor
----|---|---|---
-1 | List | List Stock Requests Presenter | Query
-2 | List | View Products Presenter | Query
-3 | Tally Bar | View Product Presenter | Read
-4 | Tally Bar | Toast Presenter | Query
+View | Presenter | Interactor
+---|---|---
+Map Controller | View Tags Presenter | Query Interactor
+List Controller | View Products Presenter | Query Interactor
+Toast Controller | View Notifications Presenter | Query Interactor
 
 ^ Here is an example of actual flows in our application.
 
@@ -353,6 +379,10 @@ Grid
 
 ---
 
+# Lots to Manage
+
+---
+
 # More Boilerplate
 
 ^ I've spun up screens that would have previously taken me a day in thirty minutes. 
@@ -360,6 +390,12 @@ Grid
 ---
 
 # Memory Constraints
+
+---
+
+# Difficult Debugging
+
+^ Questionable
 
 ---
 
